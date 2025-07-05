@@ -1,4 +1,4 @@
-# SEDDIT - Solana Social Media Platform
+# TOAST - Solana Social Media Platform
 
 A fully responsive Twitter-like social media web app built with HTML, CSS, and JavaScript that integrates with the Solana blockchain.
 
@@ -27,7 +27,7 @@ A fully responsive Twitter-like social media web app built with HTML, CSS, and J
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd SEDDIT
+   cd TOAST
    ```
 
 2. **Start local server**
@@ -78,7 +78,7 @@ A fully responsive Twitter-like social media web app built with HTML, CSS, and J
 ## Project Structure
 
 ```
-SEDDIT/
+TOAST/
 ├── index.html              # Main HTML file
 ├── styles/
 │   ├── main.css           # Base styles and variables
@@ -129,7 +129,7 @@ The app is prepared for smart contract integration with Anchor framework. Key ar
 ### Smart Contract Structure
 ```rust
 // Anchor program structure (to be implemented)
-pub mod seddit {
+pub mod toast {
     use super::*;
     
     pub fn post_tweet(ctx: Context<PostTweet>, content: String) -> Result<()> {
@@ -162,7 +162,7 @@ pub mod seddit {
 1. **Push to GitHub**
    ```bash
    git add .
-   git commit -m "Initial SEDDIT app"
+   git commit -m "Initial TOAST app"
    git push origin main
    ```
 
