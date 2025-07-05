@@ -192,14 +192,21 @@ async function fetchWalletBalance() {
     try {
         // Create connection to Solana
         const connection = new solanaWeb3.Connection(SOLANA_CONFIG.MAINNET.endpoint);
-        
+
         // Get SOL balance
         const solBalance = await connection.getBalance(walletState.publicKey);
-        
-        // For demo purposes, we'll simulate a USDC balance
-        // In a real implementation, you would fetch the actual USDC token account
-        const usdcBalance = 14.0; // Simulate $14 USDC balance
-        
+
+        // Get USDC SPL token balance
+        const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+        const usdcAccounts = await connection.getParsedTokenAccountsByOwner(
+            walletState.publicKey,
+            { mint: new solanaWeb3.PublicKey(USDC_MINT) }
+        );
+        let usdcBalance = 0;
+        if (usdcAccounts.value.length > 0) {
+            usdcBalance = usdcAccounts.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+        }
+
         walletState = {
             ...walletState,
             solBalance: solBalance,
@@ -208,7 +215,7 @@ async function fetchWalletBalance() {
 
         // Update UI
         updateWalletUI();
-        
+
         // Save balance
         WalletStorage.setBalance(solBalance);
 
