@@ -169,8 +169,10 @@ async function simulateTransaction(transaction) {
         // Simulate network delay
         setTimeout(async () => {
             try {
-                // Check if user has sufficient balance
-                const requiredBalance = transaction.fee * 1e9; // Convert to lamports
+                // Check if user has sufficient USDC balance
+                const currentBalance = getUSDCBalance();
+                console.log(`Transaction fee: $${transaction.fee} USDC, Current balance: $${currentBalance} USDC`);
+                
                 if (!hasSufficientBalance(transaction.fee)) {
                     throw new Error(ERROR_MESSAGES.WALLET.INSUFFICIENT_BALANCE);
                 }

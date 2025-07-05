@@ -53,4 +53,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Responsive sidebar toggle (for mobile)
     // (Implementation can be added here if needed)
+    
+    // Add testing functions to global scope for debugging
+    window.TOAST_DEBUG = {
+        setUSDCBalance: (balance) => {
+            if (typeof setUSDCBalance === 'function') {
+                setUSDCBalance(balance);
+                showToast(`USDC balance set to $${balance}`, 'success');
+            }
+        },
+        getUSDCBalance: () => {
+            if (typeof getUSDCBalance === 'function') {
+                const balance = getUSDCBalance();
+                console.log(`Current USDC balance: $${balance}`);
+                return balance;
+            }
+        },
+        testTransaction: () => {
+            const balance = getUSDCBalance();
+            const fee = TRANSACTION_CONFIG.FEES.POST_TWEET;
+            console.log(`Testing transaction: Fee $${fee}, Balance $${balance}, Sufficient: ${hasSufficientBalance(fee)}`);
+        }
+    };
+    
+    console.log('TOAST Debug functions available:');
+    console.log('- TOAST_DEBUG.setUSDCBalance(amount) - Set USDC balance');
+    console.log('- TOAST_DEBUG.getUSDCBalance() - Get current USDC balance');
+    console.log('- TOAST_DEBUG.testTransaction() - Test transaction balance check');
 }); 

@@ -7,7 +7,8 @@ let walletState = {
     connected: false,
     publicKey: null,
     address: null,
-    balance: 0,
+    solBalance: 0,
+    usdcBalance: 0,
     loading: false,
     error: null
 };
@@ -96,7 +97,8 @@ function handleWalletDisconnect() {
         connected: false,
         publicKey: null,
         address: null,
-        balance: 0,
+        solBalance: 0,
+        usdcBalance: 0,
         error: null
     };
 
@@ -194,13 +196,14 @@ async function fetchWalletBalance() {
         // Get SOL balance
         const solBalance = await connection.getBalance(walletState.publicKey);
         
-        // Get USDC balance (you would need to implement token account lookup)
-        // For now, we'll use a placeholder
-        const usdcBalance = 0; // This would be fetched from token account
+        // For demo purposes, we'll simulate a USDC balance
+        // In a real implementation, you would fetch the actual USDC token account
+        const usdcBalance = 14.0; // Simulate $14 USDC balance
         
         walletState = {
             ...walletState,
-            balance: solBalance
+            solBalance: solBalance,
+            usdcBalance: usdcBalance
         };
 
         // Update UI
@@ -214,7 +217,7 @@ async function fetchWalletBalance() {
             walletCallbacks.onBalanceChange(solBalance);
         }
 
-        console.log('Balance updated:', solBalance);
+        console.log('Balance updated:', { sol: solBalance, usdc: usdcBalance });
     } catch (error) {
         console.error('Error fetching balance:', error);
     }
@@ -260,8 +263,9 @@ function updateWalletUI() {
 
         // Update wallet balance
         if (walletBalance) {
-            const solBalance = walletState.balance / 1e9; // Convert lamports to SOL
-            walletBalance.textContent = `${solBalance.toFixed(4)} SOL`;
+            const solBalance = walletState.solBalance / 1e9; // Convert lamports to SOL
+            const usdcBalance = walletState.usdcBalance || 0;
+            walletBalance.textContent = `${solBalance.toFixed(4)} SOL | $${usdcBalance.toFixed(2)} USDC`;
         }
 
         // Update user avatar
@@ -347,7 +351,23 @@ function getWalletPublicKey() {
  * Get wallet balance
  */
 function getWalletBalance() {
-    return walletState.balance;
+    return walletState.solBalance || 0;
+}
+
+/**
+ * Get USDC balance
+ */
+function getUSDCBalance() {
+    return walletState.usdcBalance || 0;
+}
+
+/**
+ * Set USDC balance (for testing purposes)
+ */
+function setUSDCBalance(balance) {
+    walletState.usdcBalance = balance;
+    updateWalletUI();
+    console.log(`USDC balance set to: $${balance}`);
 }
 
 /**
@@ -361,9 +381,9 @@ function setWalletCallbacks(callbacks) {
  * Check if user has sufficient balance for action
  */
 function hasSufficientBalance(requiredAmount) {
-    // Convert required amount to lamports (assuming SOL for now)
-    const requiredLamports = requiredAmount * 1e9;
-    return walletState.balance >= requiredLamports;
+    // Check USDC balance for transaction fees
+    const usdcBalance = walletState.usdcBalance || 0;
+    return usdcBalance >= requiredAmount;
 }
 
 /**
@@ -480,6 +500,8 @@ if (typeof module !== 'undefined' && module.exports) {
         getWalletAddress,
         getWalletPublicKey,
         getWalletBalance,
+        getUSDCBalance,
+        setUSDCBalance,
         setWalletCallbacks,
         hasSufficientBalance,
         getUserDisplayName,
