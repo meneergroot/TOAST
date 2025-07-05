@@ -51,6 +51,17 @@
     border-top: 1px solid var(--border-color);
 }
 
+.composer-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.composer-submit {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
 .char-count {
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
@@ -131,6 +142,26 @@
     font-size: var(--font-size-base);
     line-height: 1.5;
     word-wrap: break-word;
+}
+
+.tweet-image {
+    margin: var(--spacing-md) 0;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background-color: var(--surface-color);
+}
+
+.tweet-image-content {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.tweet-image-content:hover {
+    transform: scale(1.02);
 }
 
 .tweet-earnings {
@@ -500,4 +531,214 @@
     75% {
         transform: translateX(2px);
     }
+}
+
+/* Image Upload Styles */
+.image-upload {
+    margin: var(--spacing-md) 0;
+}
+
+.upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background-color: var(--surface-color);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(29, 161, 242, 0.05);
+}
+
+.upload-area.dragover {
+    border-color: var(--primary-color);
+    background-color: rgba(29, 161, 242, 0.1);
+    transform: scale(1.02);
+}
+
+.upload-content i {
+    font-size: var(--font-size-3xl);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.upload-text {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.upload-hint {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.upload-formats {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.upload-fee {
+    font-size: var(--font-size-sm);
+    color: var(--primary-color);
+    font-weight: 600;
+    margin: var(--spacing-xs) 0;
+}
+
+.upload-fee i {
+    margin-right: var(--spacing-xs);
+}
+
+.upload-preview {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background-color: var(--surface-color);
+}
+
+.preview-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-actions {
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.upload-progress {
+    margin-top: var(--spacing-md);
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0%;
+    transition: width var(--transition-normal);
+    animation: progress-animation 2s ease-in-out infinite;
+}
+
+@keyframes progress-animation {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+.progress-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.upload-error {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: rgba(224, 36, 94, 0.1);
+    border: 1px solid rgba(224, 36, 94, 0.2);
+    border-radius: var(--border-radius-md);
+    color: var(--error-color);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.upload-error i {
+    font-size: var(--font-size-lg);
+}
+
+.error-text {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+/* Profile Section */
+.profile-section {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.profile-section h4 {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.profile-fee-notice {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    background-color: rgba(29, 161, 242, 0.1);
+    border: 1px solid rgba(29, 161, 242, 0.2);
+    border-radius: var(--border-radius-md);
+    color: var(--primary-color);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.profile-fee-notice i {
+    font-size: var(--font-size-sm);
+}
+
+/* Profile Image Upload */
+.profile-upload {
+    text-align: center;
+    margin: var(--spacing-lg) 0;
+}
+
+.profile-upload .upload-area {
+    max-width: 200px;
+    margin: 0 auto;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.profile-upload .preview-image {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Tweet Image Upload */
+.tweet-image-upload {
+    margin: var(--spacing-md) 0;
+}
+
+.tweet-image-upload .upload-area {
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+}
+
+.tweet-image-upload .preview-image {
+    border-radius: var(--border-radius-md);
+    max-height: 400px;
 } 

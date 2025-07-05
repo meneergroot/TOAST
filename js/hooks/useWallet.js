@@ -272,6 +272,13 @@ function updateWalletUI() {
         if (userAvatar) {
             userAvatar.src = generateAvatarUrl(walletState.address);
         }
+
+        // Show profile section
+        const profileSection = document.getElementById('profile-section');
+        if (profileSection) {
+            profileSection.style.display = 'block';
+            setupProfileUpload();
+        }
     } else {
         // Update wallet status
         walletStatus.innerHTML = `
@@ -295,6 +302,12 @@ function updateWalletUI() {
         // Reset user avatar
         if (userAvatar) {
             userAvatar.src = 'https://via.placeholder.com/40';
+        }
+
+        // Hide profile section
+        const profileSection = document.getElementById('profile-section');
+        if (profileSection) {
+            profileSection.style.display = 'none';
         }
     }
 
@@ -368,6 +381,44 @@ function setUSDCBalance(balance) {
     walletState.usdcBalance = balance;
     updateWalletUI();
     console.log(`USDC balance set to: $${balance}`);
+}
+
+/**
+ * Setup profile upload
+ */
+function setupProfileUpload() {
+    const profileUpload = document.getElementById('profile-upload');
+    if (!profileUpload) return;
+
+    // Clear existing content
+    profileUpload.innerHTML = '';
+
+    // Create profile upload element
+    const uploadElement = createImageUploadElement('profile', handleProfileUpload);
+    profileUpload.appendChild(uploadElement);
+
+    // Load existing profile image if any
+    const currentUserId = getWalletAddress();
+    const profileImage = ImageStorage.getUserProfileImage(currentUserId);
+    if (profileImage) {
+        setUploadedImage(uploadElement, `data:${profileImage.type};base64,${profileImage.data}`, profileImage.filename);
+    }
+}
+
+/**
+ * Handle profile image upload
+ * @param {object} result - Upload result
+ */
+function handleProfileUpload(result) {
+    if (result && result.success) {
+        // Update user avatar in composer
+        const userAvatar = document.getElementById('user-avatar');
+        if (userAvatar) {
+            userAvatar.src = result.url;
+        }
+        
+        showToast('Profile picture updated!', 'success');
+    }
 }
 
 /**

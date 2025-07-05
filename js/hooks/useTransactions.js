@@ -114,6 +114,38 @@ async function createLikeTweetTransaction(tweetId) {
 }
 
 /**
+ * Create a transaction for updating profile picture
+ * @returns {Promise<object>} Transaction result
+ */
+async function createProfilePictureTransaction() {
+    if (!isWalletConnected()) {
+        throw new Error('Wallet not connected');
+    }
+
+    try {
+        transactionState.pending = true;
+        transactionState.currentTransaction = {
+            type: 'PROFILE_PICTURE',
+            fee: TRANSACTION_CONFIG.FEES.PROFILE_PICTURE,
+            timestamp: Date.now()
+        };
+
+        // Call callback
+        if (transactionCallbacks.onTransactionStart) {
+            transactionCallbacks.onTransactionStart(transactionState.currentTransaction);
+        }
+
+        // Simulate the transaction
+        const result = await simulateTransaction(transactionState.currentTransaction);
+        
+        return result;
+    } catch (error) {
+        handleTransactionError(error);
+        throw error;
+    }
+}
+
+/**
  * Create a transaction for retweeting
  * @param {string} tweetId - Tweet ID to retweet
  * @returns {Promise<object>} Transaction result
@@ -180,8 +212,8 @@ async function simulateTransaction(transaction) {
                 // Generate a mock transaction signature
                 const signature = generateMockSignature();
                 
-                // Calculate fee distribution
-                const feeDistribution = getFeeDistribution(transaction.fee, transaction.creatorWallet);
+                    // Calculate fee distribution
+    const feeDistribution = getFeeDistribution(transaction.fee, transaction.creatorWallet, transaction.type);
                 
                 // Create transaction result
                 const result = {
@@ -197,7 +229,11 @@ async function simulateTransaction(transaction) {
                 TransactionStorage.addTransaction({
                     ...transaction,
                     signature,
-                    status: 'success'
+                    status: 'success',
+                    description: transaction.type === 'PROFILE_PICTURE' ? 'Profile picture update' : 
+                                transaction.type === 'POST_TWEET' ? 'Tweet posted' :
+                                transaction.type === 'LIKE_TWEET' ? 'Tweet liked' :
+                                transaction.type === 'RETWEET' ? 'Tweet retweeted' : 'Transaction'
                 });
 
                 // Update transaction state
@@ -307,9 +343,22 @@ function calculateTransactionFee(actionType) {
  * Get fee distribution for a transaction
  * @param {number} fee - Total fee amount
  * @param {string} creatorWallet - Content creator's wallet address (for likes/retweets)
+ * @param {string} transactionType - Type of transaction
  * @returns {object} Fee distribution
  */
-function getFeeDistribution(fee, creatorWallet = null) {
+function getFeeDistribution(fee, creatorWallet = null, transactionType = null) {
+    // Profile picture fees go 100% to developer
+    if (transactionType === 'PROFILE_PICTURE') {
+        return {
+            total: fee,
+            developer: fee,
+            creator: 0,
+            developerWallet: TRANSACTION_CONFIG.FEE_DISTRIBUTION.DEVELOPER_WALLET,
+            creatorWallet: null
+        };
+    }
+    
+    // Regular engagement fees (50/50 split)
     const developerShare = fee * TRANSACTION_CONFIG.FEE_DISTRIBUTION.DEVELOPER_SHARE;
     const creatorShare = fee * TRANSACTION_CONFIG.FEE_DISTRIBUTION.CREATOR_SHARE;
 
@@ -470,6 +519,7 @@ if (typeof module !== 'undefined' && module.exports) {
         createPostTweetTransaction,
         createLikeTweetTransaction,
         createRetweetTransaction,
+        createProfilePictureTransaction,
         getTransactionState,
         isTransactionPending,
         setTransactionCallbacks,

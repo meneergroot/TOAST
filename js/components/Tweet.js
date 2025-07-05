@@ -36,6 +36,12 @@ function createTweetElement(tweet) {
             
             <div class="tweet-text">${escapeHtml(tweet.content)}</div>
             
+            ${tweet.image ? `
+            <div class="tweet-image">
+                <img src="${tweet.image.url}" alt="Tweet image" class="tweet-image-content">
+            </div>
+            ` : ''}
+            
             ${isOwnTweet && earnings > 0 ? `
             <div class="tweet-earnings">
                 <i class="fas fa-coins"></i>
@@ -240,9 +246,10 @@ function updateTweetRetweetUI(tweetId, isRetweeted) {
 /**
  * Create a new tweet
  * @param {string} content - Tweet content
+ * @param {object} imageData - Optional image data
  * @returns {object} Created tweet object
  */
-function createTweet(content) {
+function createTweet(content, imageData = null) {
     const currentUserId = getWalletAddress();
     
     const tweet = {
@@ -257,6 +264,15 @@ function createTweet(content) {
         retweets: 0,
         comments: 0
     };
+
+    // Add image if provided
+    if (imageData && imageData.success) {
+        tweet.image = {
+            url: imageData.url,
+            filename: imageData.filename,
+            size: imageData.size
+        };
+    }
 
     // Add to storage
     TweetStorage.addTweet(tweet);

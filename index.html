@@ -54,6 +54,17 @@
                     </button>
                 </div>
 
+                <div class="profile-section" id="profile-section" style="display: none;">
+                    <h4>Profile Picture</h4>
+                    <div class="profile-fee-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Profile picture changes cost $1.00 USDC</span>
+                    </div>
+                    <div id="profile-upload" class="profile-upload">
+                        <!-- Profile upload will be inserted here -->
+                    </div>
+                </div>
+
                 <div class="theme-toggle">
                     <button id="theme-toggle" class="btn btn-secondary">
                         <i class="fas fa-moon"></i>
@@ -80,14 +91,27 @@
                     <img id="user-avatar" src="https://via.placeholder.com/40" alt="User Avatar" class="user-avatar">
                     <div class="composer-content">
                         <textarea id="tweet-text" placeholder="What's happening on Solana?" maxlength="280"></textarea>
+                        
+                        <!-- Image Upload Area -->
+                        <div id="tweet-image-upload" class="tweet-image-upload" style="display: none;">
+                            <!-- Image upload will be inserted here -->
+                        </div>
+                        
                         <div class="composer-footer">
-                            <div class="char-count">
-                                <span id="char-count">280</span>
+                            <div class="composer-actions">
+                                <button id="add-image" class="btn btn-secondary btn-sm" title="Add image">
+                                    <i class="fas fa-image"></i>
+                                </button>
                             </div>
-                            <button id="post-tweet" class="btn btn-primary" disabled>
-                                <i class="fas fa-paper-plane"></i>
-                                Post ($0.01)
-                            </button>
+                            <div class="composer-submit">
+                                <div class="char-count">
+                                    <span id="char-count">280</span>
+                                </div>
+                                <button id="post-tweet" class="btn btn-primary" disabled>
+                                    <i class="fas fa-paper-plane"></i>
+                                    Post ($0.01)
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,10 +182,12 @@
     <script src="js/utils/constants.js"></script>
     <script src="js/utils/helpers.js"></script>
     <script src="js/utils/storage.js"></script>
+    <script src="js/utils/imageUpload.js"></script>
     <script src="js/hooks/useWallet.js"></script>
     <script src="js/hooks/useTransactions.js"></script>
     <script src="js/components/Tweet.js"></script>
     <script src="js/components/Toast.js"></script>
+    <script src="js/components/ImageUpload.js"></script>
     <script src="js/pages/Feed.js"></script>
     <script src="js/app.js"></script>
 </body>

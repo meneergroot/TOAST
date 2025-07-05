@@ -31,7 +31,8 @@ const TRANSACTION_CONFIG = {
     FEES: {
         POST_TWEET: 0.01, // $0.01 for posting a tweet
         LIKE_TWEET: 0.01, // $0.01 for liking a tweet
-        RETWEET: 0.01     // $0.01 for retweeting
+        RETWEET: 0.01,    // $0.01 for retweeting
+        PROFILE_PICTURE: 1.00 // $1.00 for changing profile picture
     },
     
     // Fee distribution
@@ -123,6 +124,10 @@ const SUCCESS_MESSAGES = {
         POSTED: 'Tweet posted successfully! You earned $0.005 USDC',
         LIKED: 'Tweet liked successfully! Creator earned $0.005 USDC',
         RETWEETED: 'Tweet retweeted successfully! Creator earned $0.005 USDC'
+    },
+    
+    PROFILE: {
+        UPDATED: 'Profile picture updated successfully! ($1.00 fee charged)'
     }
 };
 

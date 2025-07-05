@@ -111,10 +111,12 @@ TOAST/
 - **Post Tweet**: $0.01 USDC
 - **Like Tweet**: $0.01 USDC
 - **Retweet**: $0.01 USDC
+- **Profile Picture**: $1.00 USDC
 
 ### Revenue Sharing
-- **Developer Wallet**: `EpfmoiBoNFEofbACjZo1vpyqXUy5Fq9ZtPrGVwok5fb3` (50%)
+- **Developer Wallet**: `EpfmoiBoNFEofbACjZo1vpyqXUy5Fq9ZtPrGVwok5fb3` (50% of engagement fees, 100% of profile fees)
 - **Content Creators**: Original poster receives 50% of all engagement fees
+- **Profile Pictures**: 100% goes to developer wallet (prevents spam)
 
 ## Smart Contract Integration
 
@@ -149,6 +151,13 @@ pub mod toast {
     pub fn retweet(ctx: Context<Retweet>) -> Result<()> {
         // Transfer USDC fees (50% developer, 50% original poster)
         // Update retweet state
+        // Emit event
+        Ok(())
+    }
+    
+    pub fn update_profile_picture(ctx: Context<UpdateProfilePicture>) -> Result<()> {
+        // Transfer USDC fees (100% to developer wallet)
+        // Update profile picture
         // Emit event
         Ok(())
     }

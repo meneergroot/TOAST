@@ -19,7 +19,9 @@ let feedElements = {
     charCount: null,
     postButton: null,
     feed: null,
-    refreshButton: null
+    refreshButton: null,
+    addImageButton: null,
+    imageUploadArea: null
 };
 
 /**
@@ -33,6 +35,8 @@ function initFeed() {
     feedElements.postButton = document.getElementById('post-tweet');
     feedElements.feed = document.getElementById('tweet-feed');
     feedElements.refreshButton = document.getElementById('refresh-feed');
+    feedElements.addImageButton = document.getElementById('add-image');
+    feedElements.imageUploadArea = document.getElementById('tweet-image-upload');
 
     // Set up event listeners
     setupComposerEvents();
@@ -57,6 +61,11 @@ function setupComposerEvents() {
     // Post tweet
     if (feedElements.postButton) {
         feedElements.postButton.addEventListener('click', handlePostTweet);
+    }
+
+    // Add image button
+    if (feedElements.addImageButton) {
+        feedElements.addImageButton.addEventListener('click', toggleImageUpload);
     }
 
     // Auto-resize textarea
@@ -165,8 +174,8 @@ async function handlePostTweet() {
         const result = await createPostTweetTransaction(text);
         
         if (result.success) {
-            // Create tweet object
-            const tweet = createTweet(text);
+            // Create tweet object with image if available
+            const tweet = createTweet(text, feedState.currentImage);
             
             // Add to feed
             addTweetToFeed(tweet, feedElements.feed);
@@ -175,7 +184,7 @@ async function handlePostTweet() {
             clearComposer();
             
             // Show success message
-                            showToast(SUCCESS_MESSAGES.TWEET.POSTED, 'success');
+            showToast(SUCCESS_MESSAGES.TWEET.POSTED, 'success');
             
             // Update feed state
             feedState.tweets.unshift(tweet);
@@ -194,6 +203,55 @@ async function handlePostTweet() {
 }
 
 /**
+ * Toggle image upload area
+ */
+function toggleImageUpload() {
+    if (!feedElements.imageUploadArea) return;
+    
+    if (feedElements.imageUploadArea.style.display === 'none') {
+        // Show image upload
+        feedElements.imageUploadArea.style.display = 'block';
+        
+        // Create image upload element if it doesn't exist
+        if (!feedElements.imageUploadArea.querySelector('.image-upload')) {
+            const uploadElement = createImageUploadElement('tweet', handleImageUpload);
+            feedElements.imageUploadArea.appendChild(uploadElement);
+        }
+        
+        // Update button
+        if (feedElements.addImageButton) {
+            feedElements.addImageButton.innerHTML = '<i class="fas fa-times"></i>';
+            feedElements.addImageButton.title = 'Remove image';
+        }
+    } else {
+        // Hide image upload
+        feedElements.imageUploadArea.style.display = 'none';
+        feedElements.imageUploadArea.innerHTML = '';
+        
+        // Update button
+        if (feedElements.addImageButton) {
+            feedElements.addImageButton.innerHTML = '<i class="fas fa-image"></i>';
+            feedElements.addImageButton.title = 'Add image';
+        }
+    }
+}
+
+/**
+ * Handle image upload
+ * @param {object} result - Upload result
+ */
+function handleImageUpload(result) {
+    if (result && result.success) {
+        // Store the uploaded image for the tweet
+        feedState.currentImage = result;
+        showToast('Image ready for tweet!', 'success');
+    } else {
+        // Clear any stored image
+        feedState.currentImage = null;
+    }
+}
+
+/**
  * Clear composer
  */
 function clearComposer() {
@@ -202,6 +260,21 @@ function clearComposer() {
         feedElements.tweetText.style.height = 'auto';
         handleTweetInput();
     }
+    
+    // Clear image upload
+    if (feedElements.imageUploadArea) {
+        feedElements.imageUploadArea.style.display = 'none';
+        feedElements.imageUploadArea.innerHTML = '';
+    }
+    
+    // Reset add image button
+    if (feedElements.addImageButton) {
+        feedElements.addImageButton.innerHTML = '<i class="fas fa-image"></i>';
+        feedElements.addImageButton.title = 'Add image';
+    }
+    
+    // Clear stored image
+    feedState.currentImage = null;
 }
 
 /**

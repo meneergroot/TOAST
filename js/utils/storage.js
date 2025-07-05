@@ -543,6 +543,90 @@ const TransactionStorage = {
     }
 };
 
+/**
+ * Image storage utilities
+ */
+const ImageStorage = {
+    /**
+     * Get all images
+     * @returns {Array} Array of image data
+     */
+    getAllImages() {
+        return storage.get('images', []);
+    },
+
+    /**
+     * Save an image
+     * @param {string} filename - Image filename
+     * @param {object} imageData - Image data object
+     */
+    saveImage(filename, imageData) {
+        const images = this.getAllImages();
+        
+        // Remove existing image with same filename
+        const filteredImages = images.filter(img => img.filename !== filename);
+        
+        // Add new image
+        imageData.filename = filename;
+        filteredImages.push(imageData);
+        
+        storage.set('images', filteredImages);
+    },
+
+    /**
+     * Get image by filename
+     * @param {string} filename - Image filename
+     * @returns {object|null} Image data or null
+     */
+    getImage(filename) {
+        const images = this.getAllImages();
+        return images.find(img => img.filename === filename) || null;
+    },
+
+    /**
+     * Delete image by filename
+     * @param {string} filename - Image filename
+     * @returns {boolean} Success status
+     */
+    deleteImage(filename) {
+        const images = this.getAllImages();
+        const filteredImages = images.filter(img => img.filename !== filename);
+        
+        if (filteredImages.length !== images.length) {
+            storage.set('images', filteredImages);
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Get user's images
+     * @param {string} userId - User ID
+     * @returns {Array} User's images
+     */
+    getUserImages(userId) {
+        const images = this.getAllImages();
+        return images.filter(img => img.uploadedBy === userId);
+    },
+
+    /**
+     * Get user's profile image
+     * @param {string} userId - User ID
+     * @returns {object|null} Profile image data or null
+     */
+    getUserProfileImage(userId) {
+        const userImages = this.getUserImages(userId);
+        return userImages.find(img => img.filename.startsWith('profile_')) || null;
+    },
+
+    /**
+     * Clear all images
+     */
+    clearAllImages() {
+        storage.set('images', []);
+    }
+};
+
 // Export storage utilities
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -554,6 +638,7 @@ if (typeof module !== 'undefined' && module.exports) {
         LikeStorage,
         RetweetStorage,
         UserPreferencesStorage,
-        TransactionStorage
+        TransactionStorage,
+        ImageStorage
     };
 } 

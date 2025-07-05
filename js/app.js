@@ -73,6 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const balance = getUSDCBalance();
             const fee = TRANSACTION_CONFIG.FEES.POST_TWEET;
             console.log(`Testing transaction: Fee $${fee}, Balance $${balance}, Sufficient: ${hasSufficientBalance(fee)}`);
+        },
+        testProfilePictureTransaction: async () => {
+            try {
+                console.log('Testing profile picture transaction...');
+                const result = await createProfilePictureTransaction();
+                console.log('Profile picture transaction result:', result);
+                return result;
+            } catch (error) {
+                console.error('Profile picture transaction failed:', error);
+                throw error;
+            }
         }
     };
     
@@ -80,4 +91,5 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('- TOAST_DEBUG.setUSDCBalance(amount) - Set USDC balance');
     console.log('- TOAST_DEBUG.getUSDCBalance() - Get current USDC balance');
     console.log('- TOAST_DEBUG.testTransaction() - Test transaction balance check');
+    console.log('- TOAST_DEBUG.testProfilePictureTransaction() - Test profile picture transaction');
 }); 
