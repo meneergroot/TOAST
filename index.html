@@ -63,6 +63,12 @@
                     <div id="profile-upload" class="profile-upload">
                         <!-- Profile upload will be inserted here -->
                     </div>
+                    <div class="profile-meta">
+                        <div class="profile-follow">
+                            <span id="sidebar-followers"><b>0</b> Followers</span>
+                            <span id="sidebar-following"><b>0</b> Following</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="theme-toggle">
@@ -121,6 +127,27 @@
             <div class="tweet-feed" id="tweet-feed">
                 <!-- Tweets will be dynamically loaded here -->
             </div>
+
+            <!-- Add to main content: X.com-style profile page -->
+            <section id="profile-main" class="profile-main" style="display: none;">
+                <div class="profile-header">
+                    <img id="profile-main-avatar" class="profile-main-avatar" src="https://via.placeholder.com/120" alt="Profile Picture">
+                    <div class="profile-header-info">
+                        <h2 id="profile-main-name">Display Name</h2>
+                        <div class="profile-header-meta">
+                            <span id="profile-main-username">@username</span>
+                            <span id="profile-main-address">Wallet Address</span>
+                        </div>
+                        <div class="profile-header-follow">
+                            <span id="profile-main-followers"><b>0</b> Followers</span>
+                            <span id="profile-main-following"><b>0</b> Following</span>
+                        </div>
+                        <button id="profile-main-follow-btn" class="btn btn-primary" style="display: none;">Follow</button>
+                    </div>
+                </div>
+                <div class="profile-bio" id="profile-main-bio">Bio goes here...</div>
+                <div class="profile-tweets" id="profile-main-tweets"></div>
+            </section>
         </main>
 
         <!-- Right Sidebar -->
@@ -174,6 +201,21 @@
 
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
+
+    <!-- Add responsive meta viewport if not present -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add bottom navigation bar for mobile -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <a href="#" class="bottom-nav-item" id="nav-home"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="#" class="bottom-nav-item" id="nav-explore"><i class="fas fa-hashtag"></i><span>Explore</span></a>
+        <a href="#" class="bottom-nav-item" id="nav-notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
+        <a href="#" class="bottom-nav-item" id="nav-messages"><i class="fas fa-envelope"></i><span>Messages</span></a>
+        <a href="#" class="bottom-nav-item" id="nav-profile"><i class="fas fa-user"></i><span>Profile</span></a>
+    </nav>
+    <!-- Floating Connect Wallet button for mobile -->
+    <button id="mobile-connect-wallet" class="btn btn-primary mobile-connect-wallet" style="display: none;">
+        <i class="fas fa-plug"></i> Connect Wallet
+    </button>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>

@@ -627,6 +627,54 @@ const ImageStorage = {
     }
 };
 
+const FollowStorage = {
+    getFollowers(userId) {
+        const all = storage.get('followers', {});
+        return all[userId] || [];
+    },
+    getFollowing(userId) {
+        const all = storage.get('following', {});
+        return all[userId] || [];
+    },
+    followUser(currentUserId, targetUserId) {
+        if (!currentUserId || !targetUserId || currentUserId === targetUserId) return;
+        // Update following
+        const following = this.getFollowing(currentUserId);
+        if (!following.includes(targetUserId)) {
+            following.push(targetUserId);
+            const allFollowing = storage.get('following', {});
+            allFollowing[currentUserId] = following;
+            storage.set('following', allFollowing);
+        }
+        // Update followers
+        const followers = this.getFollowers(targetUserId);
+        if (!followers.includes(currentUserId)) {
+            followers.push(currentUserId);
+            const allFollowers = storage.get('followers', {});
+            allFollowers[targetUserId] = followers;
+            storage.set('followers', allFollowers);
+        }
+    },
+    unfollowUser(currentUserId, targetUserId) {
+        if (!currentUserId || !targetUserId || currentUserId === targetUserId) return;
+        // Update following
+        let following = this.getFollowing(currentUserId);
+        following = following.filter(uid => uid !== targetUserId);
+        const allFollowing = storage.get('following', {});
+        allFollowing[currentUserId] = following;
+        storage.set('following', allFollowing);
+        // Update followers
+        let followers = this.getFollowers(targetUserId);
+        followers = followers.filter(uid => uid !== currentUserId);
+        const allFollowers = storage.get('followers', {});
+        allFollowers[targetUserId] = followers;
+        storage.set('followers', allFollowers);
+    },
+    isFollowing(currentUserId, targetUserId) {
+        return this.getFollowing(currentUserId).includes(targetUserId);
+    }
+};
+
 // Export storage utilities
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -639,6 +687,7 @@ if (typeof module !== 'undefined' && module.exports) {
         RetweetStorage,
         UserPreferencesStorage,
         TransactionStorage,
-        ImageStorage
+        ImageStorage,
+        FollowStorage
     };
 } 
