@@ -202,6 +202,32 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- Modals for mobile -->
+    <div id="tweet-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <button class="modal-close" id="close-tweet-modal"><i class="fas fa-times"></i></button>
+        <div id="tweet-modal-composer"></div>
+      </div>
+    </div>
+    <div id="notifications-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <button class="modal-close" id="close-notifications-modal"><i class="fas fa-times"></i></button>
+        <div id="notifications-modal-content"></div>
+      </div>
+    </div>
+    <div id="messages-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <button class="modal-close" id="close-messages-modal"><i class="fas fa-times"></i></button>
+        <div id="messages-modal-content"></div>
+      </div>
+    </div>
+    <!-- Main content sections for Explore, Notifications, Messages -->
+    <section id="explore-main" class="explore-main" style="display: none;"></section>
+    <section id="notifications-main" class="notifications-main" style="display: none;"></section>
+    <section id="messages-main" class="messages-main" style="display: none;"></section>
+    <!-- Floating action button for tweet composer -->
+    <button id="fab-tweet" class="fab-tweet" style="display: none;"><i class="fas fa-feather"></i></button>
+
     <!-- Add responsive meta viewport if not present -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Add bottom navigation bar for mobile -->

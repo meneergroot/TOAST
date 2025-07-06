@@ -206,25 +206,102 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.onclick = connectWallet;
     }
 
-    function setupBottomNav() {
+    function showModal(id) {
+        document.getElementById(id).style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById(id).style.opacity = 1;
+        }, 10);
+    }
+    function hideModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.style.opacity = 0;
+        setTimeout(() => { modal.style.display = 'none'; }, 200);
+    }
+    function setupModals() {
+        // Tweet modal
+        const fab = document.getElementById('fab-tweet');
+        if (fab) {
+            fab.addEventListener('click', () => {
+                // Move tweet composer into modal
+                const composer = document.querySelector('.tweet-composer');
+                if (composer) {
+                    document.getElementById('tweet-modal-composer').appendChild(composer);
+                    composer.style.display = 'block';
+                }
+                showModal('tweet-modal');
+            });
+        }
+        document.getElementById('close-tweet-modal').onclick = () => {
+            hideModal('tweet-modal');
+            // Move composer back to main content
+            const composer = document.querySelector('.tweet-composer');
+            const mainContent = document.querySelector('.main-content');
+            if (composer && mainContent) mainContent.insertBefore(composer, mainContent.firstChild);
+        };
+        document.getElementById('tweet-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) hideModal('tweet-modal');
+        });
+        // Notifications modal
+        document.getElementById('nav-notifications').addEventListener('click', (e) => {
+            e.preventDefault();
+            renderNotifications();
+            showModal('notifications-modal');
+        });
+        document.getElementById('close-notifications-modal').onclick = () => hideModal('notifications-modal');
+        document.getElementById('notifications-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) hideModal('notifications-modal');
+        });
+        // Messages modal
+        document.getElementById('nav-messages').addEventListener('click', (e) => {
+            e.preventDefault();
+            renderMessages();
+            showModal('messages-modal');
+        });
+        document.getElementById('close-messages-modal').onclick = () => hideModal('messages-modal');
+        document.getElementById('messages-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) hideModal('messages-modal');
+        });
+    }
+    function renderNotifications() {
+        document.getElementById('notifications-modal-content').innerHTML = '<h3>Notifications</h3><p>No notifications yet.</p>';
+        document.getElementById('notifications-main').innerHTML = '<h2>Notifications</h2><p>No notifications yet.</p>';
+    }
+    function renderMessages() {
+        document.getElementById('messages-modal-content').innerHTML = '<h3>Messages</h3><p>No messages yet.</p>';
+        document.getElementById('messages-main').innerHTML = '<h2>Messages</h2><p>No messages yet.</p>';
+    }
+    function renderExplore() {
+        document.getElementById('explore-main').innerHTML = '<h2>Explore</h2><p>Trending topics and search coming soon!</p>';
+    }
+    function updateFABVisibility() {
+        const fab = document.getElementById('fab-tweet');
+        if (!fab) return;
+        // Show FAB on Home and Explore only
+        const homeVisible = document.getElementById('tweet-feed').style.display !== 'none';
+        const exploreVisible = document.getElementById('explore-main').style.display !== 'none';
+        fab.style.display = (homeVisible || exploreVisible) ? 'flex' : 'none';
+    }
+    // Patch bottom nav to show/hide main sections and update FAB
+    function setupBottomNavPatched() {
         const navIds = ['nav-home', 'nav-explore', 'nav-notifications', 'nav-messages', 'nav-profile'];
         const mainSections = {
             'nav-home': 'tweet-feed',
             'nav-profile': 'profile-main',
-            // Add more as you implement Explore, Notifications, Messages
+            'nav-explore': 'explore-main',
+            'nav-notifications': 'notifications-main',
+            'nav-messages': 'messages-main',
         };
         navIds.forEach(id => {
             const nav = document.getElementById(id);
             if (!nav) return;
             nav.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Highlight active
                 navIds.forEach(i => {
                     const n = document.getElementById(i);
                     if (n) n.classList.remove('active');
                 });
                 nav.classList.add('active');
-                // Show/hide main sections
                 Object.values(mainSections).forEach(sec => {
                     const el = document.getElementById(sec);
                     if (el) el.style.display = 'none';
@@ -233,11 +310,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     const el = document.getElementById(mainSections[id]);
                     if (el) el.style.display = 'block';
                 }
-                // Special: Home shows composer, Profile hides it
+                // Special: Home/Explore shows composer/FAB, Profile hides it
                 const composer = document.querySelector('.tweet-composer');
                 if (id === 'nav-home' && composer) composer.style.display = 'block';
-                if (id === 'nav-profile' && composer) composer.style.display = 'none';
+                if (id !== 'nav-home' && composer) composer.style.display = 'none';
+                updateFABVisibility();
                 if (id === 'nav-profile') showProfilePage();
+                if (id === 'nav-explore') renderExplore();
+                if (id === 'nav-notifications') renderNotifications();
+                if (id === 'nav-messages') renderMessages();
             });
         });
     }
@@ -254,7 +335,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSidebarProfileLink();
     updateSidebarProfileMeta();
     setupMobileConnectWalletButton();
-    setupBottomNav();
-    setupMobileWalletStateListeners();
-    updateMobileConnectWalletButton();
+    setupBottomNavPatched();
+    renderExplore();
+    renderNotifications();
+    renderMessages();
+    updateFABVisibility();
+    window.addEventListener('resize', updateFABVisibility);
+    setupModals();
 }); 
