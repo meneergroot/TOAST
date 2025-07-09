@@ -190,11 +190,15 @@ async function fetchWalletBalance() {
     if (!walletState.connected || !walletState.publicKey) return;
 
     try {
+        console.log('Fetching wallet balance...');
+        console.log('Using endpoint:', SOLANA_CONFIG.MAINNET.endpoint);
+        
         // Create connection to Solana
         const connection = new solanaWeb3.Connection(SOLANA_CONFIG.MAINNET.endpoint);
 
         // Get SOL balance
         const solBalance = await connection.getBalance(walletState.publicKey);
+        console.log('SOL balance fetched:', solBalance);
 
         // Get USDC SPL token balance
         const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
@@ -206,6 +210,7 @@ async function fetchWalletBalance() {
         if (usdcAccounts.value.length > 0) {
             usdcBalance = usdcAccounts.value[0].account.data.parsed.info.tokenAmount.uiAmount;
         }
+        console.log('USDC balance fetched:', usdcBalance);
 
         walletState = {
             ...walletState,
@@ -227,7 +232,18 @@ async function fetchWalletBalance() {
         console.log('Balance updated:', { sol: solBalance, usdc: usdcBalance });
     } catch (error) {
         console.error('Error fetching balance:', error);
+        // Set a default balance for testing if fetch fails
+        walletState.usdcBalance = 0;
+        updateWalletUI();
     }
+}
+
+/**
+ * Force refresh wallet balance
+ */
+async function forceRefreshBalance() {
+    console.log('Force refreshing wallet balance...');
+    await fetchWalletBalance();
 }
 
 /**
@@ -568,6 +584,7 @@ if (typeof module !== 'undefined' && module.exports) {
         signMessage,
         signTransaction,
         signAllTransactions,
-        requestAirdrop
+        requestAirdrop,
+        forceRefreshBalance
     };
 } 

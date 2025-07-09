@@ -2,7 +2,7 @@
 const SOLANA_CONFIG = {
     // Mainnet configuration
     MAINNET: {
-        endpoint: 'https://api.mainnet-beta.solana.com',
+        endpoint: 'https://solana-mainnet.g.alchemy.com/v2/0Loj0xjq2nQy2NLbY4NkL4-YhwmHuyaj',
         commitment: 'confirmed',
         network: 'mainnet-beta'
     },

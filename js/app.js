@@ -84,6 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Profile picture transaction failed:', error);
                 throw error;
             }
+        },
+        forceRefreshBalance: async () => {
+            if (typeof forceRefreshBalance === 'function') {
+                await forceRefreshBalance();
+                showToast('Balance refreshed', 'info');
+            }
         }
     };
     
@@ -92,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('- TOAST_DEBUG.getUSDCBalance() - Get current USDC balance');
     console.log('- TOAST_DEBUG.testTransaction() - Test transaction balance check');
     console.log('- TOAST_DEBUG.testProfilePictureTransaction() - Test profile picture transaction');
+    console.log('- TOAST_DEBUG.forceRefreshBalance() - Force refresh wallet balance');
 
     // Show the X.com-style profile page
     function showProfilePage(userId = null) {
